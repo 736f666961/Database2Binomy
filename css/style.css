@@ -1,0 +1,14 @@
+body {
+    background-color: #f7f7f7;
+}
+
+.card{
+    height: 300px;
+}
+
+@media only screen and (max-width: 992px){
+    #logo{
+        height: 50%;
+        width: 100%;
+    }
+}
