@@ -1,12 +1,24 @@
 {
   "name": "db",
   "version": "1.0.0",
-  "description": "",
+  "description": "Managing Stock of Products",
   "main": "server.js",
+  "dependencies": {
+    "ejs": "^3.1.2"
+  },
+  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ABDERRAZZAKELGHYATI/Database2Binomy.git"
+  },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ABDERRAZZAKELGHYATI/Database2Binomy/issues"
+  },
+  "homepage": "https://github.com/ABDERRAZZAKELGHYATI/Database2Binomy#readme"
 }

@@ -13,18 +13,18 @@ app.use(bodyParser.urlencoded({extended : false}));
 app.set('view engine', 'ejs');
 
 // ======== Connected MySQL via NodeJS========
-// const db = mysql.createConnection({
-//     host:'localhost',
-//     user:'admin',
-//     password:'nasa',
-//     database:'Data'
-// });
+const db = mysql.createConnection({
+    host:'localhost',
+    user:'admin',
+    password:'nasa',
+    database:'Products'
+});
 
 // Check if database is connected ... !
-// db.connect(function(error){
-//     if(error) console.log(error);
-//     else console.log(`Connected to database Data... !`)
-// }); 
+db.connect(function(error){
+    if(error) console.log(error);
+    else console.log(`Connected to database Data... !`)
+}); 
 
 // Set views aka where to look for files
 app.set('views', 'views');
