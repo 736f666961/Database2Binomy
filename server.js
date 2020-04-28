@@ -13,21 +13,26 @@ app.use(bodyParser.urlencoded({extended : false}));
 app.set('view engine', 'ejs');
 
 // ======== Connected MySQL via NodeJS========
-// const db = mysql.createConnection({
-//     host:'localhost',
-//     user:'admin',
-//     password:'nasa',
-//     database:'Data'
-// });
+const db = mysql.createConnection({
+    host:'localhost',
+    user:'root',
+    password:'',
+    database:'Products'
+});
 
 // Check if database is connected ... !
-// db.connect(function(error){
-//     if(error) console.log(error);
-//     else console.log(`Connected to database Data... !`)
-// }); 
+db.connect(function(error){
+    if(error) console.log(error);
+    else console.log(`Connected to database Data... !`)
+}); 
 
 // Set views aka where to look for files
 app.set('views', 'views');
+
+app.get("/", (req, res) => {  
+    
+    res.render("Home", {})
+});
 
 app.get("/electroProducts", (req, res) => {
     // const sql = "SELECT * FROM cards";
@@ -48,18 +53,18 @@ app.get("/fruitProducts", (req, res) => {
 });
 
 // When user trying to create a new quote
-app.post("/newCard", (req, res) => {
+app.post("/newRyon", (req, res) => {
     // Get data from user
     let data = {
-        pictureUrl: "./img/" + req.body.pictureUrl,
         name: req.body.name,
-        description: req.body.description
+        image: req.body.image
     };
+
+    
 
     db.query('INSERT INTO cards SET ?', data, function (err, result) {
       if (err) throw err;
       res.redirect('/');
-
     });
 
     // res.end("Data Created Successfuly ... !")

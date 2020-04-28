@@ -10,7 +10,7 @@
         <img src="../img/logo.gif" id="logo" class="rounded mx-auto d-block" alt="...">
 
         
-            <div class="container d-flex justify-content-center">
+            <div class="container ">
                 <div class="row">
                     <!-- Card 1 -->
                     <div class="container col-md-4 col-lg-4 mt-4">
@@ -18,7 +18,7 @@
                         <div class="card">
                             <img class="card-img-top w-100 h-75" src="../img/Techno.png" alt="#">
                             <div class="card-body">
-                            <h2 class="card-title text-center">Technologie </h2>
+                            <h2 class="card-title text-center">Technology </h2>
                             <!-- <p class="card-text">Some example text some example text. John Doe is an architect and engineer</p> -->
                             <!-- <a href="#" class="btn btn-primary">See Profile</a> -->
                             </div>
@@ -40,8 +40,21 @@
                     
 
                     
-                </div>
+                </div><br><br>
+                <form action="/newRyon" method="POST">
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Ryon Name</label>
+                      <input type="email" class="form-control" name="name"  aria-describedby="emailHelp">
+                      
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">image URL</label>
+                        <input type="email" class="form-control" name="image" aria-describedby="emailHelp">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Submit</button>
+                  </form>
             </div>
-        
+            
+            
     </body>
 </html>
