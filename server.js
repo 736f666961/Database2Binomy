@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({extended : false}));
 // Set Engine
 app.set('view engine', 'ejs');
 
-// ======== Connected MySQL via NodeJS========
+// ======== Connected MySQL via NodeJS ========
 const db = mysql.createConnection({
     host:'localhost',
     user:'admin',
