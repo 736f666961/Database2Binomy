@@ -5,15 +5,15 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     </head>
     <body>
-        <dicv class="container d-md-flex justify-content-center">
-            <div class="container row">
+        <div class="container mt-4">
+            <div class="row">
                 <!-- Card 1 -->
                 <div class="col-md-4 col-lg-4 mt-4">
 
-                    <div class="card">
-                        <img class="card-img-top w-100 h-50" src="../img/products/fruits/apple.jpeg" alt="Apple">
+                    <div class="card" style="height: 402px;">
+                        <img class="card-img-top w-100 h-75 d-flex justify-content-center" src="../img/products/fruits/apple.jpeg" alt="Apple">
                         <div class="card-body">
-                          <h2 class="card-title text-center">Apple</h2>
+                          <h2 class="card-title text-center text-muted">Apple</h2>
                           <!-- <p class="card-text">Some example text some example text. John Doe is an architect and engineer</p> -->
                           <!-- <a href="#" class="btn btn-primary">See Profile</a> -->
                         </div>
@@ -22,10 +22,10 @@
 
                 <!-- Card 2 -->
                 <div class="col-md-4 col-lg-4 mt-4">
-                    <div class="card">
-                        <img class="card-img-top w-100 h-50" src="../img/products/fruits/k.jpeg" alt="Kiwi">
+                    <div class="card" style="height: 402px;">
+                        <img class="card-img-top w-100 h-75" src="../img/products/fruits/k.png" alt="Kiwi">
                         <div class="card-body">
-                          <h2 class="card-title text-center">Kiwi</h2>
+                          <h2 class="card-title text-center text-muted">Kiwi</h2>
                           <!-- <p class="card-text">Some example text some example text. John Doe is an architect and engineer</p> -->
                           <!-- <a href="#" class="btn btn-primary">See Profile</a> -->
                         </div>
@@ -34,28 +34,16 @@
 
                 <!-- Card 3 -->
                 <div class="col-md-4 col-lg-4 mt-4">
-                    <div class="card">
-                        <img class="card-img-top w-100 h-50" src="../img/products/fruits/an.jpeg" alt="An">
+                    <div class="card" style="height: 402px;">
+                        <img class="card-img-top w-100 h-75" src="../img/products/fruits/an.png" alt="An">
                         <div class="card-body">
-                          <h2 class="card-title text-center">Anans</h2>
+                          <h2 class="card-title text-center text-muted">Anans</h2>
                           <!-- <p class="card-text">Some example text some example text. John Doe is an architect and engineer</p> -->
                           <!-- <a href="#" class="btn btn-primary">See Profile</a> -->
                         </div>
                       </div>
                 </div>
-
-                <!-- Reading More Cards From Dtabase -->
-                <!-- <% for (const card of cards){%>
-                  <div class="col-md-4 h-auto col-lg-3 mr-4 mt-2 border">
-                    <img class="w-100 h-50" src="<%= card.pictureUrl%>" alt="">
-                    <h2 class="text-center text-muted text-uppercase"><%= card.name%></h2>
-                    <h5 class="card-title text-muted text-center"><%= card.description%></h5>
-                    <div class="row d-flex justify-content-center mt-4">
-                      <a href="edit/<%= card.ID %>"><button class="col btn btn-outline-primary p-3 border">Edit</button></a>
-                      <a href="delete/<%= card.ID %>"><button class="col btn btn-outline-danger p-3 border">Delete</button></a>
-                    </div>
-                </div>
-                <%}%> -->  
+                
             </div>
         </div>
     </body>

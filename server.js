@@ -17,7 +17,7 @@ const db = mysql.createConnection({
     host:'localhost',
     user:'root',
     password:'',
-    database:'Products'
+    database:'products'
 });
 
 // Check if database is connected ... !
@@ -30,21 +30,20 @@ db.connect(function(error){
 app.set('views', 'views');
 
 app.get("/", (req, res) => {  
-    
-    res.render("Home", {})
+    const sql = "SELECT * FROM ryon";
+    const query = db.query(sql, (err, data) => {
+        if(err) console.log(err);
+        else{
+            res.render('Home', {
+                products : data
+            });
+        }
+                
+    });
+
 });
 
 app.get("/electroProducts", (req, res) => {
-    // const sql = "SELECT * FROM cards";
-    // const query = db.query(sql, (err, data) => {
-    //     if(err) console.log(err);
-    //     else{
-    //         res.render('home', {
-    //             cards : data
-    //         });
-    //     }
-                
-    // });
     res.render("eclectroProducts", {})
 });
 
@@ -62,7 +61,7 @@ app.post("/newRyon", (req, res) => {
 
     
 
-    db.query('INSERT INTO cards SET ?', data, function (err, result) {
+    db.query('INSERT INTO ryon SET ?', data, function (err, result) {
       if (err) throw err;
       res.redirect('/');
     });
