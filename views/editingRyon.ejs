@@ -4,22 +4,22 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     </head>
     <body>
-            <!-- Adding New Product -->
-            <div class="container mt-4">
-                <h2 class="text-center text-muted mt-4">Ryon Editing</h2>
-                <form action="/editRyon/<%= productId %>" method="POST">
-                  <div class="form-group">
+        <!-- Adding New Ryon -->
+        <div class="container mt-4">
+            <h2 class="text-center text-muted mt-4">Ryon Editing</h2>
+            <form action="/editRyon/<%= productId %>" method="POST">
+                <div class="form-group">
                     <label for="pictureUrl">Ryon Picture:</label>
                     <input type="text" class="form-control" placeholder="Enter Picture of ryon" name="image">
-                  </div>
+                </div>
 
-                  <div class="form-group">
+                <div class="form-group">
                     <label for="name">Ryon Name:</label>
                     <input type="text" class="form-control" placeholder="Enter name of ryon" name="name">
-                  </div>
+                </div>
 
-                  <input type="submit" class="btn btn-default border w-100" value="Edit">
-                </form>
-            </div>
+                <input type="submit" class="btn btn-default border w-100" value="Edit">
+            </form>
+        </div>
     </body>
 </html>

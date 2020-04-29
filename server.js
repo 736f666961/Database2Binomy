@@ -1,3 +1,4 @@
+// Import necessary packages
 const express = require('express');
 const mysql = require('mysql');
 const fs = require('fs');
@@ -8,12 +9,13 @@ const app = express();
 // Include stylesheets and images
 app.use(express.static(__dirname));
 
+// Use body parser middleware
 app.use(bodyParser.urlencoded({extended : false}));
 
 // Set Engine
 app.set('view engine', 'ejs');
 
-// ======== Connected MySQL via NodeJS========
+// Connect to MySQL via NodeJS
 const db = mysql.createConnection({
     host:'localhost',
     user:'root',
@@ -44,7 +46,6 @@ app.get("/", (req, res) => {
     });
 
 });
-
 
 // When request the product page of some ryon
 app.get("/ryon/:productId", (req, res) => {
@@ -99,7 +100,9 @@ app.post("/newProduct/:productId", (req, res) => {
             });
         }
       });
-      res.end("Product added successfully !");
+
+    // Show response to user
+    res.end("Product added successfully !");
 
     // Show results
     console.log("-- Request : newProduct/" + productId);
@@ -123,6 +126,7 @@ app.get('/editProduct/:productId',(req, res) => {
         let query = db.query(sql, (err, results) => {
           if(err) throw err;
         });
+        // Show response to user
         res.end("Product edited successfully !");
     });
 
@@ -169,7 +173,7 @@ app.post("/newRyon", (req, res) => {
 
 });
 
-// Quote new products
+// Delete new products
 app.get("/delete/:productId", (req, res) => {
     const productId = req.params.productId;
     // Reading from file
@@ -187,11 +191,16 @@ app.get("/delete/:productId", (req, res) => {
 
 // Deleting ryon from home
 app.get("/deleteRyon/:ryonId", (req, res) => {
+    // Get id from url
     const ryonId = req.params.ryonId;
+    
     // Reading from file
     let rf = fs.readFileSync("check", "utf8");
 
+    // Sql language command
     let sql = `DELETE FROM ryon where ID=${ryonId}`;
+
+    // Execute sql query
     db.query(sql, (err, results) => {
       if(err) throw err;
       res.redirect('/');
@@ -203,6 +212,7 @@ app.get("/deleteRyon/:ryonId", (req, res) => {
 
 // Editing Ryon From Home
 app.get('/editRyon/:productId',(req, res) => {
+    // Get Id from url
     let productId = req.params.productId;
 
     // Reading from file
@@ -213,16 +223,18 @@ app.get('/editRyon/:productId',(req, res) => {
         productId : req.params.productId
     });
 
+    // For editing existing ryon from home
     app.post('/editRyon/' + productId,(req, res) => {
         let sql = `Update ryon SET image='${req.body.image}', name='${req.body.name}' where id=${productId}`;
         db.query(sql, (err, results) => {
           if(err) throw err;
         });
+
+        // Show response to user
         res.end("Ryon edited successfully !");
     });
 
-    // console.log("request : /editProducts : | " + productId);
-    // console.log("Updating table newProduct" + rf);
+    // Show results
     console.log("Requesting /editRyon" + productId);
     console.log("This will execute Update table newProduct" + rf + " where id=" + productId);
 });
