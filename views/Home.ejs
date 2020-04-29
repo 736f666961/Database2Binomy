@@ -37,21 +37,24 @@
                         </div>
                     </div>
 
-                <!-- Reading More Cards From Dtabase -->
+                <!-- Reading More Ryon From Dtabase -->
                 <% for (const product of products){%>
                   <div class="container col-md-4 col-lg-4 mt-4">
+                      <a href="ryon/<%= product.id %>" class="h-75 text-decoration-none">
                         <div class="card">
-                            <img class="card-img-top w-100 h-75" src="<%= product.image%>" alt="#">
-                            <div class="card-body">
-                            <h2 class="card-title text-center"><%= product.name%></h2>
-            
+                            <img class="card-img-top w-100 h-100" src="<%= product.image%>" alt="#">
+                            <div class="d-flex card-body">
+                                <a href="/editRyon/<%= product.id %>" class="col"><button class="col btn btn-outline-primary p-2">Edit</button></a>
+                                <h2 class="col card-title text-center text-muted"><%= product.name%></h2>
+                                <a href="/deleteRyon/<%= product.id %>" class="col"><button class="col btn btn-outline-danger p-2">Delete</button></a>
                             </div>
                         </div>
+                      </a>
                     </div>
                 <%}%>
                                         
                 </div><br><br>
-                <form action="/newRyon" method="POST">
+                <form class="container" action="/newRyon" method="POST">
                     <div class="form-group">
                       <label for="exampleInputEmail1">Ryon Name</label>
                       <input type="text" class="form-control" name="name"  aria-describedby="emailHelp">

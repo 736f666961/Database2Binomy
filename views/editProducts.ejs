@@ -1,0 +1,35 @@
+<html>
+    <head>
+        <title>Editing Products</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    </head>
+    <body>
+            <!-- Adding New Product -->
+            <div class="container mt-4">
+                <h2 class="text-center text-muted mt-4">Product Editing</h2>
+                <form action="/editProduct/<%= productId %>" method="POST">
+                  <div class="form-group">
+                    <label for="pictureUrl">Product Picture:</label>
+                    <input type="text" class="form-control" placeholder="Enter Picture of product" name="image">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="name">Product Name:</label>
+                    <input type="text" class="form-control" placeholder="Enter name of product" name="name">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="name">Product Price:</label>
+                    <input type="text" class="form-control" placeholder="Enter the price of product" name="price">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="name">Product Quantity:</label>
+                    <input type="text" class="form-control" placeholder="Enter the quantity of product" name="quantity">
+                  </div>
+
+                  <input type="submit" class="btn btn-default border w-100" value="Add new product">
+                </form>
+            </div>
+    </body>
+</html>
