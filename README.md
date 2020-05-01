@@ -11,7 +11,6 @@ npm install
 
 
 >Running
- - To run server type :
 ```
 nodemon server
 ```
