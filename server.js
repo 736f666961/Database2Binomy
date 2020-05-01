@@ -3,6 +3,7 @@ const express = require('express');
 const mysql = require('mysql');
 const fs = require('fs');
 const bodyParser = require('body-parser');
+const parse = require('node-html-parser').parse;
 
 const app = express();
 
@@ -47,7 +48,7 @@ app.get("/", (req, res) => {
 
 });
 
-// When request the product page of some ryon
+// When request the product page from some ryon
 app.get("/ryon/:productId", (req, res) => {
     // Get id from url
     let productId = req.params.productId;
@@ -77,6 +78,69 @@ app.get("/ryon/:productId", (req, res) => {
     fs.writeFileSync("check", productId);
 });
 
+// When user request some "Fournisseur" from some product
+app.get("/fournisseur/:fournisseurId", (req, res) => {
+    let fournisseurId = req.params.fournisseurId;
+
+    let b = false;
+    db.query(`SELECT * FROM fournisseur WHERE ID=${fournisseurId}`, (err, data) => {
+        if (err) throw err;
+            res.render('fournisseur', {
+                fournisseurs : data,
+                fournisseurId: fournisseurId,
+                bool: b
+            });
+        });
+
+    app.post("/newFournisseur/" + fournisseurId, (req, res) => {
+        // Get data from user
+        let data = {
+            name: req.body.name,
+            email: req.body.email,
+            phone: req.body.phone,
+            address: req.body.address,
+        };
+
+        // Reading cghecl file
+        let rf = fs.readFileSync("check", "utf8");
+
+        // Check fournisseur
+        let checkForni = `SELECT max(id) FROM fournisseur WHERE ID=${rf}`;
+        db.query(checkForni, (err, result) => {
+            try{
+                if(err) throw err.message;
+                // let id = result[0].ID;
+                let id = result[0];
+                if (id != null){
+                    console.log("From (If) id > 0 : " + id);
+                    if (id == fournisseurId){
+                        b = true;
+                        console.log("id == fournisseurID : " + id + " == " + fournisseurId);
+                        res.end("This product is already has a fourisseur ... !");
+                    }else{
+                        console.log("-- (Else) : id > 0 but id != fournisseur id : " + id + " != " + fournisseurId);
+                        db.query('INSERT INTO fournisseur SET ?', data, (err, result) => {
+                            if (err) throw err;
+                            res.end("New Fournisseur Created !");
+                        });                  
+                    }
+                   
+                }else{
+                    db.query('INSERT INTO fournisseur SET ?', data, (err, result) => {
+                        if (err) throw err;
+                        res.end("New Fournisseur Created !");
+                    });
+                }
+                console.log("id (Else) : " + id.ID);
+                console.log("Fournisseur.ID: " + fournisseurId);
+            }catch(err){
+                console.log("Error: " + err);
+            }
+        });
+
+    });
+});
+
 // Creating New Products
 app.post("/newProduct/:productId", (req, res) => {
     // Get Id From Url
@@ -95,7 +159,7 @@ app.post("/newProduct/:productId", (req, res) => {
             quantity: req.body.quantity
         };
 
-        // Check table exists
+        // Create table if not exists
         let sql = "CREATE TABLE IF NOT EXISTS newProduct" + productId + "(id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, image varchar(255), name varchar(255), quantity int(11) NOT NULL, price float NOT NULL);";
         db.query(sql, function (err, result) {
             if (err) throw err;
@@ -201,7 +265,7 @@ app.get("/delete/:productId", (req, res) => {
     });
 
     // Show results
-    // console.log("Deleting newProduct" + productId + " where id=" + productId);
+    // console.log("Deleting newProduct" + rf + " where id=" + productId);
     // console.log("ryon" + productId + " has products " + x);
     // console.log("Value stored in products" + productId + " is " + x);
 
@@ -215,7 +279,7 @@ app.get("/deleteRyon/:ryonId", (req, res) => {
     const ryonId = req.params.ryonId;
     
     // Reading from file
-    let rf = fs.readFileSync("check", "utf8");
+    // let rf = fs.readFileSync("check", "utf8");
 
     // Sql language command
     let deleteRyon = `DELETE FROM ryon where ID=${ryonId}`;
@@ -224,11 +288,11 @@ app.get("/deleteRyon/:ryonId", (req, res) => {
     // SELECT MAX(id) AS maxId FROM newproduct1;
     let checkTable = `SELECT MAX(id) as maxId FROM newProduct` + ryonId +`;`;
 
-    console.log("SELECT MAX(ID) FROM newProduct" + ryonId);
+    // console.log("SELECT MAX(ID) FROM newProduct" + ryonId);
     db.query(checkTable, (err, chTable) => {
         try{
             if(err) throw err.message;
-            console.log("--Max(id) : " + chTable[0].maxId);
+            // console.log("--Max(id) : " + chTable[0].maxId);
             let id = chTable[0].maxId;
             if (id == null){
                 // Delete ryon
@@ -288,5 +352,5 @@ app.get('/editRyon/:productId',(req, res) => {
 
 //  Listing Server 
 app.listen(4000, () => {
-    console.log('server is rinning')
+    console.log('server is running')
 });

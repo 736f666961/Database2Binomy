@@ -13,17 +13,17 @@
             <div class="row">
                 <!-- Reading More New Products From Dtabase -->
                 <% for (const product of products){%>
-                  <div class="container col-md-4 col-lg-4 mt-4">
-                      <!-- <a href="#" class="text-decoration-none"> -->
+                    <div class="container col-md-4 col-lg-4 mt-4">
+                      <a href="/fournisseur/<%= product.id %>" class="h-75 text-decoration-none">
                         <div class="card h-400">
-                            <img class="card-img-top w-100 h-50" src="<%= product.image%>" alt="#">
-                            <div class="card-body">
+                            <img class="card-img-top w-100 h-75" src="<%= product.image %>" alt="#">
+                            <div class="card-body" style="margin-top: -85px;">
                                 <h2 class="card-title text-center text-muted"><%= product.name%>
-                                  <span style="font-size: 16px;"><%= product.quantity%> Left</span>
+                                  <span style="font-size: 16px;"><%= product.quantity %> Left</span>
                                 </h2>
 
                                 <h2 class="card-title text-center text-muted">
-                                  <strong><%= product.price%></strong><span style="font-size: 16px;">£</span> 
+                                  <strong><%= product.price %></strong><span style="font-size: 16px;">£</span> 
                                 </h2>
 
                                 <div class="row container">
@@ -32,7 +32,7 @@
                                 </div>
                               </div>
                         </div>
-                      <!-- </a> -->
+                      </a>
                     </div>
                 <%}%>
             </div>
