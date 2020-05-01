@@ -5,9 +5,9 @@
 npm install
 ```
 >Requirements
- - -Create Database "stock" </li>
- - -Import "fournisseur" Table</li>
- - -Import "ryon" Table</li>
+ - - Create Database "stock" </li>
+ - - Import "fournisseur" Table</li>
+ - - Import "ryon" Table</li>
 
 
 >Running
