@@ -4,13 +4,13 @@
 ```
 npm install
 ```
->Requirements
+>-Requirements
  - Create Database "stock" </li>
  - Import "fournisseur" Table</li>
  - Import "ryon" Table</li>
 
 
-### Running
+>Running
 ```
 nodemon server
 ```
