@@ -1,4 +1,4 @@
-## <span>|</span> Managaement Database with NodeJS
+## <span style="color:#868e96">|</span> Managaement Database with NodeJS
 
 ### Installing
 ```
