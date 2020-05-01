@@ -71,7 +71,7 @@ app.get("/ryon/:productId", (req, res) => {
     });
 
     // Show results
-    console.log("-- Request : ryon/" + productId);
+    // console.log("-- Request : ryon/" + productId);
 
     // Writing to check file
     fs.writeFileSync("check", productId);
@@ -82,30 +82,40 @@ app.post("/newProduct/:productId", (req, res) => {
     // Get Id From Url
     let productId = req.params.productId;
 
-    // Get data from user
-    let data = {
-        name: req.body.name,
-        image: req.body.image,
-        price: req.body.price,
-        quantity: req.body.quantity
-    };
+    // Check User Inputs
+    if ((req.body.name != "" && req.body.name.match(/[a-zA-Z]/)) && 
+        (req.body.picture != "") && 
+        (req.body.price.match(/[0-9]/) && req.body.price != "" && !(req.body.price.match(/[a-zA-Z]/))) && 
+        (req.body.quantity.match(/[0-9]/) && req.body.quantity != "" && !(req.body.price.match(/[a-zA-Z]/)))){
+        // Get data from user
+        let data = {
+            name: req.body.name,
+            image: req.body.image,
+            price: req.body.price,
+            quantity: req.body.quantity
+        };
 
-    // Check table exists
-    let sql = "CREATE TABLE IF NOT EXISTS newProduct" + productId + "(id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, image varchar(255), name varchar(255), quantity int(11) NOT NULL, price float NOT NULL);";
-    db.query(sql, function (err, result) {
-        if (err) throw err;
-        else{
-            db.query('INSERT INTO newProduct' + productId + ' SET ?', data, (err, result) => {
-                if (err) throw err;
-            });
-        }
-      });
+        // Check table exists
+        let sql = "CREATE TABLE IF NOT EXISTS newProduct" + productId + "(id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, image varchar(255), name varchar(255), quantity int(11) NOT NULL, price float NOT NULL);";
+        db.query(sql, function (err, result) {
+            if (err) throw err;
+            else{
+                db.query('INSERT INTO newProduct' + productId + ' SET ?', data, (err, result) => {
+                    if (err) throw err;
+                });
+            }
+        });
 
-    // Show response to user
-    res.end("Product added successfully !");
+        // Show response to user
+        res.end("Product added successfully !");
 
-    // Show results
-    console.log("-- Request : newProduct/" + productId);
+        // Show results
+        // console.log("-- Request : newProduct/" + productId);
+    }else{
+        // res.end("<h1>Invalid Inputs</h1>");
+        // console.log("Invalid Form !...");
+    }
+
 });
 
 // Editing New Products
@@ -130,9 +140,9 @@ app.get('/editProduct/:productId',(req, res) => {
     });
 
     // console.log("request : /editProducts : | " + productId);
-    console.log("Updating table newProduct" + rf);
-    console.log("Requesting /editProduct" + productId);
-    console.log("This will execute Update table newProduct" + rf + " where id=" + productId);
+    // console.log("Updating table newProduct" + rf);
+    // console.log("Requesting /editProduct" + productId);
+    // console.log("This will execute Update table newProduct" + rf + " where id=" + productId);
 });
 
 // When request electroProduct Static Page
@@ -147,27 +157,31 @@ app.get("/fruitProducts", (req, res) => {
 
 // Create table for each newly created ryon
 app.post("/newRyon", (req, res) => {
-    // Get data from user
-    let data = {
-        name: req.body.name,
-        image: req.body.image
-    };
+    if ((req.body.name != "" && req.body.name.match(/[a-zA-Z]/)) &&  (req.body.picture != "")){
+        // Get data from user
+        let data = {
+            name: req.body.name,
+            image: req.body.image
+        };
 
-    // Get number of created tables
-    db.query('INSERT INTO ryon SET ?', data, function (err, result) {
-      if (err) throw err;
-      res.redirect('/');
-    });
+        // Get number of created tables
+        db.query('INSERT INTO ryon SET ?', data, function (err, result) {
+        if (err) throw err;
+        res.redirect('/');
+        });
 
-    // Creating check file for reading later new product
-    if (fs.existsSync("check")){
-        // Reading from check file
-        let rf = fs.readFileSync("check", 'utf8');
+        // Creating check file for reading later new product
+        if (fs.existsSync("check")){
+            // Reading from check file
+            let rf = fs.readFileSync("check", 'utf8');
 
-        // Increment check file value by 1
-        fs.writeFileSync("check", rf++);
+            // Increment check file value by 1
+            fs.writeFileSync("check", rf++);
+        }else{
+            fs.writeFileSync("check", 0);
+        }
     }else{
-        fs.writeFileSync("check", 0);
+        // res.end("Invalid Inputs");
     }
 
 });
@@ -187,7 +201,7 @@ app.get("/delete/:productId", (req, res) => {
     });
 
     // Show results
-    console.log("Deleting newProduct" + productId + " where id=" + productId);
+    // console.log("Deleting newProduct" + productId + " where id=" + productId);
     // console.log("ryon" + productId + " has products " + x);
     // console.log("Value stored in products" + productId + " is " + x);
 
@@ -221,14 +235,16 @@ app.get("/deleteRyon/:ryonId", (req, res) => {
                 db.query(deleteRyon, (err, result) => {
                     if (err) throw err;
                 });
-                console.log("You can delete table ryon");
+                // console.log("You can delete table ryon");
             }else{
-                console.log("You can not delete table ryon");
+                // console.log("You can not delete table ryon");
             }
         }catch(err){
-            console.log("Error: " + err);
+            // console.log("Error: " + err);
+            console.log(err);
         }finally{
-            console.log("Mission done");
+            // console.log("Mission done");
+            console.log("");
         }
     }); 
     
@@ -266,8 +282,8 @@ app.get('/editRyon/:productId',(req, res) => {
     });
 
     // Show results
-    console.log("Requesting /editRyon" + productId);
-    console.log("This will execute Update table newProduct" + rf + " where id=" + productId);
+    // console.log("Requesting /editRyon" + productId);
+    // console.log("This will execute Update table newProduct" + rf + " where id=" + productId);
 });
 
 //  Listing Server 
