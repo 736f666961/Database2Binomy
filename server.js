@@ -106,7 +106,6 @@ app.post("/newProduct/:productId", (req, res) => {
 
     // Show results
     console.log("-- Request : newProduct/" + productId);
-      
 });
 
 // Editing New Products
@@ -176,17 +175,24 @@ app.post("/newRyon", (req, res) => {
 // Delete new products
 app.get("/delete/:productId", (req, res) => {
     const productId = req.params.productId;
-    // Reading from file
-    let rf = fs.readFileSync("check", "utf8");
+
+    // Reading which ryon you are in
+    let rf = fs.readFileSync("check");
 
     let sql = `DELETE FROM newProduct` + rf + ` where ID=${productId}`;
     db.query(sql, (err, results) => {
       if(err) throw err;
+      // wriring file that conatins this products
       res.redirect('/');
     });
 
     // Show results
-    console.log("Deleting newProduct" + rf + " where id=" + productId);
+    console.log("Deleting newProduct" + productId + " where id=" + productId);
+    // console.log("ryon" + productId + " has products " + x);
+    // console.log("Value stored in products" + productId + " is " + x);
+
+    // End response
+    // res.end()
 });
 
 // Deleting ryon from home
@@ -198,16 +204,40 @@ app.get("/deleteRyon/:ryonId", (req, res) => {
     let rf = fs.readFileSync("check", "utf8");
 
     // Sql language command
-    let sql = `DELETE FROM ryon where ID=${ryonId}`;
+    let deleteRyon = `DELETE FROM ryon where ID=${ryonId}`;
 
-    // Execute sql query
-    db.query(sql, (err, results) => {
-      if(err) throw err;
-      res.redirect('/');
-    });
+    // let checkTable = `SELECT MAX(id) FROM newProduct` + ryonId +`;`;
+    // SELECT MAX(id) AS maxId FROM newproduct1;
+    let checkTable = `SELECT MAX(id) as maxId FROM newProduct` + ryonId +`;`;
+
+    console.log("SELECT MAX(ID) FROM newProduct" + ryonId);
+    db.query(checkTable, (err, chTable) => {
+        try{
+            if(err) throw err.message;
+            console.log("--Max(id) : " + chTable[0].maxId);
+            let id = chTable[0].maxId;
+            if (id == null){
+                // Delete ryon
+                db.query(deleteRyon, (err, result) => {
+                    if (err) throw err;
+                });
+                console.log("You can delete table ryon");
+            }else{
+                console.log("You can not delete table ryon");
+            }
+        }catch(err){
+            console.log("Error: " + err);
+        }finally{
+            console.log("Mission done");
+        }
+    }); 
+    
+    // End response
+    res.redirect("/");
+    
 
     // Show results
-    console.log("Deleting from table ryon where id=" + ryonId);
+    // console.log("Deleting from table ryon where id=" + ryonId);
 });
 
 // Editing Ryon From Home
@@ -231,7 +261,8 @@ app.get('/editRyon/:productId',(req, res) => {
         });
 
         // Show response to user
-        res.end("Ryon edited successfully !");
+        // res.end("Ryon edited successfully !");
+        res.redirect("/");
     });
 
     // Show results
