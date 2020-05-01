@@ -1,4 +1,4 @@
-# Stock Managaement Database with NodeJS
+## Stock Managaement Database with NodeJS
 
 ### Installing
 ```
