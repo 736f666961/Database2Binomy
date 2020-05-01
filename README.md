@@ -10,7 +10,7 @@ npm install
  3. Import "ryon" Table</li>
 
 
->Running
+>Running : Type
 ```
 nodemon server
 ```
