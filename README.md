@@ -1,14 +1,14 @@
-## >Managaement Database with NodeJS
+>Managaement Database with NodeJS
 
 ### Installing
 ```
 npm install
 ```
-### - Requirements
+### Requirements
 <ol>
-    <li> - Create Database "stock" </li>
-    <li> - Import "fournisseur" Table</li>
-    <li> - Import "ryon" Table</li>
+    <li> Create Database "stock" </li>
+    <li> Import "fournisseur" Table</li>
+    <li> Import "ryon" Table</li>
 </ol>
 
 ### Running
