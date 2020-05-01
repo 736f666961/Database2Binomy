@@ -4,10 +4,10 @@
 ```
 npm install
 ```
->-Requirements
- - Create Database "stock" </li>
- - Import "fournisseur" Table</li>
- - Import "ryon" Table</li>
+>Requirements
+ - -Create Database "stock" </li>
+ - -Import "fournisseur" Table</li>
+ - -Import "ryon" Table</li>
 
 
 >Running
