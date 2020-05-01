@@ -1,15 +1,14 @@
-<h2>>Managaement Database with NodeJS<h2>
+>Managaement Database with NodeJS
 
-### Installing
+>Installing
 ```
 npm install
 ```
-### Requirements
-<ol>
-    <li> Create Database "stock" </li>
-    <li> Import "fournisseur" Table</li>
-    <li> Import "ryon" Table</li>
-</ol>
+>Requirements
+ - Create Database "stock" </li>
+ - Import "fournisseur" Table</li>
+ - Import "ryon" Table</li>
+
 
 ### Running
 ```
