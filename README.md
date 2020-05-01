@@ -1,4 +1,4 @@
-## | Managaement Database with NodeJS
+## <span>|</span> Managaement Database with NodeJS
 
 ### Installing
 ```
