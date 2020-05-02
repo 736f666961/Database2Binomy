@@ -26,7 +26,7 @@ const db = mysql.createConnection({
 // Check if database is connected ... !
 db.connect(function(error){
     if(error) console.log(error);
-    else console.log(`Connected to database Data... !`)
+    else console.log(`Connected to database ... !`)
 }); 
 
 // Set views aka where to look for files
