@@ -40,5 +40,4 @@ function Check(event){
         name.style.border = "1px solid red";
         event.preventDefault();
     }
-    console.log("Hi");
 }

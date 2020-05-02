@@ -3,7 +3,6 @@ const express = require('express');
 const mysql = require('mysql');
 const fs = require('fs');
 const bodyParser = require('body-parser');
-const parse = require('node-html-parser').parse;
 
 const app = express();
 
@@ -36,16 +35,14 @@ app.set('views', 'views');
 // When User request home page
 app.get("/", (req, res) => {
     const sql = "SELECT * FROM ryon";
-    const query = db.query(sql, (err, data) => {
+    db.query(sql, (err, data) => {
         if(err) console.log(err);
         else{
             res.render('Home', {
                 products : data
             });
-        }
-                
+        }           
     });
-
 });
 
 // When request the product page from some ryon
@@ -53,36 +50,33 @@ app.get("/ryon/:productId", (req, res) => {
     // Get id from url
     let productId = req.params.productId;
 
-    console.log("ProductId From get: " + productId);
-
     // Show results
     // console.log("-- Request : ryon/" + productId);
+    // console.log("ProductId From get: " + productId);
 
     // Writing to check file
     if (!(isNaN(parseInt(productId)))){
-    // Writing sql commands
-    const sql = "CREATE TABLE IF NOT EXISTS newProduct" + productId + "(id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, image varchar(255), name varchar(255), quantity int(11) NOT NULL, price float NOT NULL) ;"
+        // Writing sql commands
+        const sql = "CREATE TABLE IF NOT EXISTS newProduct" + productId + "(id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, image varchar(255), name varchar(255), quantity int(11) NOT NULL, price float NOT NULL) ;"
 
-    // Exeecute sql commands
-    const query = db.query(sql, (err, data) => {
-        if(err) throw err;
-        else{
-            db.query("SELECT * FROM newProduct" + productId, (err, data) => {
-                if (err) throw err;
-                res.render('addnewproducts', {
-                    products : data,
-                    productId: productId
+        // Exeecute sql commands
+        db.query(sql, (err, data) => {
+            if(err) throw err;
+            else{
+                db.query("SELECT * FROM newProduct" + productId, (err, data) => {
+                    if (err) throw err;
+                    res.render('addnewproducts', {
+                        products : data,
+                        productId: productId
+                    });
                 });
-            });
-
-        }  
-        
-    });
-    fs.writeFileSync("check", productId);
-    console.log("It's not NaN");
-    
+            }
+        });
+        fs.writeFileSync("check", productId);
+        // console.log("It's not NaN");
     }else{
-        console.log("It's NaN");
+        // console.log("It's NaN");
+        console.log("");
     }
 });
 
@@ -93,15 +87,14 @@ app.get("/fournisseur/:fournisseurId", (req, res) => {
     // Reading cghecl file
     let rf = fs.readFileSync("check", "utf8");
 
+    // Showing the corespnding fournisseur
     db.query(`SELECT * FROM fournisseur WHERE ID=${rf}`, (err, data) => {
         try{
             if (err) throw err.message;
-            // fs.existsSync("fournisseur")
-            // console.log(data[0].maxId);
             if (data[0] != undefined){
                 let checkId = data[0].ID;
-                console.log("-- rf == checkId " + rf + " == " + checkId);
-                console.log("== check Ternary:  " + rf == checkId ? true : false);
+                // console.log("-- rf == checkId " + rf + " == " + checkId);
+                // console.log("== check Ternary:  " + rf == checkId ? true : false);
                 res.render('fournisseur', {
                     fournisseurs : data,
                     fournisseurId: fournisseurId,
@@ -116,54 +109,62 @@ app.get("/fournisseur/:fournisseurId", (req, res) => {
                 });
 
             }
-
         }catch(err){
             console.log("Error: " + err);
         }
     });
 
+    // Create new fournisseur
     app.post("/newFournisseur/" + fournisseurId, (req, res) => {
-        // Get data from user
-        let data = {
-            name: req.body.name,
-            email: req.body.email,
-            phone: req.body.phone,
-            address: req.body.address,
-        };
+        if ((req.body.name != "" && req.body.name.match(/[a-zA-Z]/)) && 
+        (req.body.email.indexOf("@") != -1) && 
+        (req.body.phone.match(/[0-9]/) && req.body.phone != "" && !(req.body.phone.match(/[a-zA-Z]/))) && 
+        (req.body.address != "" )){
+            // Get data from user
+            let data = {
+                name: req.body.name,
+                email: req.body.email,
+                phone: req.body.phone,
+                address: req.body.address,
+            };
 
-        // Check fournisseur
-        let checkForni = `SELECT id as ID FROM fournisseur WHERE ID=${fournisseurId}`;
-        db.query(checkForni, (err, result) => {
-            try{
-                if(err) throw err.message;
-                let id = result[0];
-                if (id != null){
-                    console.log("From (If) id > 0 : " + id);
-                    if (id == fournisseurId){
-                        console.log("id == fournisseurID : " + id + " == " + fournisseurId);
-                        res.end("This product is already has a fourisseur ... !");
+            // Check fournisseur
+            let checkForni = `SELECT id as ID FROM fournisseur WHERE ID=${fournisseurId}`;
+            db.query(checkForni, (err, result) => {
+                try{
+                    if(err) throw err.message;
+                    let id = result[0];
+                    if (id != null){
+                        // console.log("From (If) id > 0 : " + id);
+                        if (id == fournisseurId){
+                            console.log("id == fournisseurID : " + id + " == " + fournisseurId);
+                            res.end("This product is already has a fourisseur ... !");
+                        }else{
+                            // console.log("-- (Else) : id > 0 but id != fournisseur id : " + id + " != " + fournisseurId);
+                            db.query('INSERT INTO fournisseur SET ?', data, (err, result) => {
+                                if (err) throw err;
+                                // res.end("New Fournisseur Created !");
+                                res.redirect("/fournisseur/" + fournisseurId);
+                            });                  
+                        }
+                    
                     }else{
-                        console.log("-- (Else) : id > 0 but id != fournisseur id : " + id + " != " + fournisseurId);
                         db.query('INSERT INTO fournisseur SET ?', data, (err, result) => {
                             if (err) throw err;
                             // res.end("New Fournisseur Created !");
                             res.redirect("/fournisseur/" + fournisseurId);
-                        });                  
+                        });
                     }
-                   
-                }else{
-                    db.query('INSERT INTO fournisseur SET ?', data, (err, result) => {
-                        if (err) throw err;
-                        // res.end("New Fournisseur Created !");
-                        res.redirect("/fournisseur/" + fournisseurId);
-                    });
+                    // Debugging
+                    // console.log("id (Else) : " + id.ID);
+                    // console.log("Fournisseur.ID: " + fournisseurId);
+                }catch(err){
+                    console.log("Error: " + err);
                 }
-                // console.log("id (Else) : " + id.ID);
-                // console.log("Fournisseur.ID: " + fournisseurId);
-            }catch(err){
-                console.log("Error: " + err);
-            }
-        });
+            });
+        }else{
+            res.end("<h1>Invalid Form</h1>")
+        }
 
     });
 });
@@ -172,8 +173,6 @@ app.get("/fournisseur/:fournisseurId", (req, res) => {
 app.post("/newProduct/:productId", (req, res) => {
     // Get Id From Url
     let productId = req.params.productId;
-    console.log("1 - NewProductId From get: " + productId);
-
 
     // Check User Inputs
     if ((req.body.name != "" && req.body.name.match(/[a-zA-Z]/)) && 
@@ -196,8 +195,8 @@ app.post("/newProduct/:productId", (req, res) => {
                 db.query('INSERT INTO newProduct' + productId + ' SET ?', data, (err, result) => {
                     if (err) throw err;
                 });
-                console.log("2 - NewProductId From get: " + productId);
-
+                // Debugging
+                // console.log("2 - NewProductId From get: " + productId);
             }
         });
 
@@ -208,9 +207,10 @@ app.post("/newProduct/:productId", (req, res) => {
         // console.log("-- Request : newProduct/" + productId);
     }else{
         res.end("<h1>Invalid Inputs</h1>");
-        // console.log("Invalid Form !...");
-        console.log("3 - NewProductId From get: " + productId);
 
+        // Debugging
+        // console.log("Invalid Form !...");
+        // console.log("3 - NewProductId From get: " + productId);
     }
 
 });
@@ -227,16 +227,18 @@ app.get('/editProduct/:productId',(req, res) => {
         productId : req.params.productId
     });
 
+    // Editing product
     app.post('/editProduct/' + productId,(req, res) => {
         let sql = `Update newProduct` + rf + ` SET image='${req.body.image}', name='${req.body.name}', quantity='${req.body.quantity}', price='${req.body.price}' where id=${productId}`;
         let query = db.query(sql, (err, results) => {
           if(err) throw err;
         });
+
         // Show response to user
         res.end("Product edited successfully !");
     });
 
-    // console.log("request : /editProducts : | " + productId);
+    // Debugging
     // console.log("Updating table newProduct" + rf);
     // console.log("Requesting /editProduct" + productId);
     // console.log("This will execute Update table newProduct" + rf + " where id=" + productId);
@@ -280,7 +282,6 @@ app.post("/newRyon", (req, res) => {
     }else{
         // res.end("Invalid Inputs");
     }
-
 });
 
 // Delete new products
@@ -290,6 +291,7 @@ app.get("/delete/:productId", (req, res) => {
     // Reading which ryon you are in
     let rf = fs.readFileSync("check");
 
+    // Deleting product
     let sql = `DELETE FROM newProduct` + rf + ` where ID=${productId}`;
     db.query(sql, (err, results) => {
       if(err) throw err;
@@ -299,8 +301,6 @@ app.get("/delete/:productId", (req, res) => {
 
     // Show results
     // console.log("Deleting newProduct" + rf + " where id=" + productId);
-    // console.log("ryon" + productId + " has products " + x);
-    // console.log("Value stored in products" + productId + " is " + x);
 
     // End response
     // res.end()
@@ -348,7 +348,6 @@ app.get("/deleteRyon/:ryonId", (req, res) => {
     // End response
     res.redirect("/");
     
-
     // Show results
     // console.log("Deleting from table ryon where id=" + ryonId);
 });
@@ -359,7 +358,7 @@ app.get('/editRyon/:productId',(req, res) => {
     let productId = req.params.productId;
 
     // Reading from file
-    let rf = fs.readFileSync("check", "utf8");
+    fs.readFileSync("check", "utf8");
 
     // Rendering editProducts Page
     res.render("editingRyon", {
@@ -385,5 +384,5 @@ app.get('/editRyon/:productId',(req, res) => {
 
 //  Listing Server 
 app.listen(4000, () => {
-    console.log('server is running')
+    console.log('server is running at port 4000')
 });
