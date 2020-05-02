@@ -53,6 +53,13 @@ app.get("/ryon/:productId", (req, res) => {
     // Get id from url
     let productId = req.params.productId;
 
+    console.log("ProductId From get: " + productId);
+
+    // Show results
+    // console.log("-- Request : ryon/" + productId);
+
+    // Writing to check file
+    if (!(isNaN(parseInt(productId)))){
     // Writing sql commands
     const sql = "CREATE TABLE IF NOT EXISTS newProduct" + productId + "(id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, image varchar(255), name varchar(255), quantity int(11) NOT NULL, price float NOT NULL) ;"
 
@@ -67,30 +74,53 @@ app.get("/ryon/:productId", (req, res) => {
                     productId: productId
                 });
             });
+
         }  
         
     });
-
-    // Show results
-    // console.log("-- Request : ryon/" + productId);
-
-    // Writing to check file
     fs.writeFileSync("check", productId);
+    console.log("It's not NaN");
+    
+    }else{
+        console.log("It's NaN");
+    }
 });
 
 // When user request some "Fournisseur" from some product
 app.get("/fournisseur/:fournisseurId", (req, res) => {
     let fournisseurId = req.params.fournisseurId;
 
-    let b = false;
-    db.query(`SELECT * FROM fournisseur WHERE ID=${fournisseurId}`, (err, data) => {
-        if (err) throw err;
-            res.render('fournisseur', {
-                fournisseurs : data,
-                fournisseurId: fournisseurId,
-                bool: b
-            });
-        });
+    // Reading cghecl file
+    let rf = fs.readFileSync("check", "utf8");
+
+    db.query(`SELECT * FROM fournisseur WHERE ID=${rf}`, (err, data) => {
+        try{
+            if (err) throw err.message;
+            // fs.existsSync("fournisseur")
+            // console.log(data[0].maxId);
+            if (data[0] != undefined){
+                let checkId = data[0].ID;
+                console.log("-- rf == checkId " + rf + " == " + checkId);
+                console.log("== check Ternary:  " + rf == checkId ? true : false);
+                res.render('fournisseur', {
+                    fournisseurs : data,
+                    fournisseurId: fournisseurId,
+                    bool: rf == checkId ? true : false
+                });
+   
+            }else{
+                res.render('fournisseur', {
+                    fournisseurs : data,
+                    fournisseurId: fournisseurId,
+                    bool: false
+                });
+
+            }
+
+        }catch(err){
+            console.log("Error: " + err);
+        }
+    });
 
     app.post("/newFournisseur/" + fournisseurId, (req, res) => {
         // Get data from user
@@ -101,38 +131,35 @@ app.get("/fournisseur/:fournisseurId", (req, res) => {
             address: req.body.address,
         };
 
-        // Reading cghecl file
-        let rf = fs.readFileSync("check", "utf8");
-
         // Check fournisseur
-        let checkForni = `SELECT max(id) FROM fournisseur WHERE ID=${rf}`;
+        let checkForni = `SELECT id as ID FROM fournisseur WHERE ID=${fournisseurId}`;
         db.query(checkForni, (err, result) => {
             try{
                 if(err) throw err.message;
-                // let id = result[0].ID;
                 let id = result[0];
                 if (id != null){
                     console.log("From (If) id > 0 : " + id);
                     if (id == fournisseurId){
-                        b = true;
                         console.log("id == fournisseurID : " + id + " == " + fournisseurId);
                         res.end("This product is already has a fourisseur ... !");
                     }else{
                         console.log("-- (Else) : id > 0 but id != fournisseur id : " + id + " != " + fournisseurId);
                         db.query('INSERT INTO fournisseur SET ?', data, (err, result) => {
                             if (err) throw err;
-                            res.end("New Fournisseur Created !");
+                            // res.end("New Fournisseur Created !");
+                            res.redirect("/fournisseur/" + fournisseurId);
                         });                  
                     }
                    
                 }else{
                     db.query('INSERT INTO fournisseur SET ?', data, (err, result) => {
                         if (err) throw err;
-                        res.end("New Fournisseur Created !");
+                        // res.end("New Fournisseur Created !");
+                        res.redirect("/fournisseur/" + fournisseurId);
                     });
                 }
-                console.log("id (Else) : " + id.ID);
-                console.log("Fournisseur.ID: " + fournisseurId);
+                // console.log("id (Else) : " + id.ID);
+                // console.log("Fournisseur.ID: " + fournisseurId);
             }catch(err){
                 console.log("Error: " + err);
             }
@@ -145,6 +172,8 @@ app.get("/fournisseur/:fournisseurId", (req, res) => {
 app.post("/newProduct/:productId", (req, res) => {
     // Get Id From Url
     let productId = req.params.productId;
+    console.log("1 - NewProductId From get: " + productId);
+
 
     // Check User Inputs
     if ((req.body.name != "" && req.body.name.match(/[a-zA-Z]/)) && 
@@ -167,17 +196,21 @@ app.post("/newProduct/:productId", (req, res) => {
                 db.query('INSERT INTO newProduct' + productId + ' SET ?', data, (err, result) => {
                     if (err) throw err;
                 });
+                console.log("2 - NewProductId From get: " + productId);
+
             }
         });
 
         // Show response to user
-        res.end("Product added successfully !");
-
+        // res.end("Product added successfully !");
+        res.redirect("/ryon/" + productId);
         // Show results
         // console.log("-- Request : newProduct/" + productId);
     }else{
-        // res.end("<h1>Invalid Inputs</h1>");
+        res.end("<h1>Invalid Inputs</h1>");
         // console.log("Invalid Form !...");
+        console.log("3 - NewProductId From get: " + productId);
+
     }
 
 });

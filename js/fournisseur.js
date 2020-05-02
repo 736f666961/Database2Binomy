@@ -9,22 +9,22 @@
     // Check Id
     let id = document.querySelector(".checked p").id;
 
-    if (id == "false" || id == 0 || Boolean(id) == 0){
+    if (id == "true"){
         // Disable all inputs
-        name.disabled = false;
-        email.disabled = false;
-        phone.disabled = false;
-        address.disabled = false;
-        submit.disabled = false;
-        console.log("False");
-        console.log("1 - Id " + id);
-    }else{
         name.disabled = true;
         email.disabled = true;
         phone.disabled = true;
         address.disabled = true;
         submit.disabled = true;
         console.log("True");
+        console.log("1 - Id " + id);
+    }else{
+        name.disabled = false;
+        email.disabled = false;
+        phone.disabled = false;
+        address.disabled = false;
+        submit.disabled = false;
+        console.log("False");
         console.log("2 - Id " + id);
     }
 })();
